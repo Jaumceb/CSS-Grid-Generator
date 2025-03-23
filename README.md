@@ -1,2 +1,2 @@
 # CSS-Grid-Generator
-![Image](https://github.com/user-attachments/assets/8ba6548a-9025-4ce0-8a5f-db0d5e1b3074)
+![Image](https://github.com/user-attachments/assets/ce7f287c-d295-4a59-b45b-d6a47e760583)
