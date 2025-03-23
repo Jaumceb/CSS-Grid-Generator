@@ -3,43 +3,59 @@
   }
   
   body {
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     display: flex;
     justify-content: center;
-    align-items: center;
     height: 100vh;
     margin: 0;
-  }
-  
-  .container {
-    text-align: center;
-  }
+}
+
+.container {
+    margin: auto;
+
+}
+
+
   
   .controls {
-    margin-top: 500px;
     font-size: 20px;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: max-content;
   }
   
   .controls label,
   .controls input {
     margin: 5px;
   }
-  
+  .control {
+    border: none;
+    color: white;
+    background-color: #1b1630;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 18px;
+    width: 50px;
+  }
   .grid-container {
+    top: 30px;
     display: grid;
     margin: 20px auto;
-    width: 100%;
-    max-width: 900px;
-    height: 500px;
+    width: 767px;
     position: relative;
-  }
-  
+    grid-auto-rows: 50px; 
+}
+
+
   .grid-item {
     background-color: #5e4caf;
     color: white;
     text-align: center;
     position: relative;
     border-radius: 10px;
+    height: 50px;
   }
   
   .grid-item button {
@@ -54,7 +70,7 @@
     height: 100%;
     width: 100%;
     border-radius: 10px;
-    font-size: 30px;
+    font-size: 15px;
     color: grey;
   }
   
@@ -76,6 +92,7 @@
     align-items: center;
     z-index: 100;
     border-radius: 10px;
+    transition: 0.2s;
   }
   
   .resize-handle {
@@ -92,18 +109,58 @@
   }
   
   .output {
+    position: relative;
     margin-top: 20px;
     height: 500px;
+    padding: 10px;
+    z-index: 10; 
+}
+  
+  .copy-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    
   }
   
-  #cssOutput {
+  .copyToClipboard {
+    position: absolute;
+    top: 15px;
+    right: 0px;
+    padding: 5px 10px;
+    background-color: #5e4caf;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+  
+  .copyToClipboard:hover {
+    background-color: #4a3a92;
+  }
+  
+  textarea {
     width: 100%;
     padding: 10px;
     font-family: monospace;
-  }
-  #htmlOutput {
-    width: 100%;
-    padding: 10px;
-    font-family: monospace;
+    margin-top: 15px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 1px 1px 15px #000;
+    
   }
   
+  @media (max-width: 768px) {
+    .grid-container {
+        width: 479px;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .grid-container {
+      width: 380px;
+       
+    }
+}

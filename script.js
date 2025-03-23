@@ -1,6 +1,6 @@
-let elementCount = 0; // Contador
+let elementCount = 0; // Counter
   
-  // Célula da Grid
+  //Grid Cell
 function updateGrid() {
   const columns = parseInt(document.getElementById('columns').value);
   const rows = parseInt(document.getElementById('rows').value);
@@ -50,8 +50,9 @@ function updateGrid() {
       }
 
       gridContainer.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-      gridContainer.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+      gridContainer.style.gridAutoRows = `min-content`; 
       gridContainer.style.gridGap = `${gap}px`;
+
 
       const css = `
         .grid-container {
@@ -66,7 +67,7 @@ function updateGrid() {
       updateHTML();
   }
 
-  //Elemento (DIV)
+  //Element (DIV)
 function addElement(gridItem) {
       elementCount++;
       const element = document.createElement('div');
@@ -81,7 +82,7 @@ function addElement(gridItem) {
 
       element.addEventListener('dragstart', function (event) {
         event.dataTransfer.setData("element-id", element.id);
-        setTimeout(() => element.style.opacity = '0.5', 0);
+        setTimeout(() => element.style.opacity = '0.8', 0);
       });
 
       element.addEventListener('dragend', function () {
@@ -141,7 +142,7 @@ function addElement(gridItem) {
       updateHTML();  
   }
   
-  //Código CSS
+  //Code CSS
 function updateElementCSS(element, gridItem) {
       const cssOutput = document.getElementById('cssOutput');
       const gridContainer = document.getElementById('gridContainer');
@@ -185,7 +186,7 @@ function updateElementCSS(element, gridItem) {
 
       cssOutput.value += `\n${elementCSS.trim()}`;
   }
-  //Código HTML
+  //Code HTML
 function updateHTML() {
       const gridContainer = document.getElementById('gridContainer');
       const htmlOutput = document.getElementById('htmlOutput');
@@ -206,6 +207,13 @@ function updateHTML() {
       htmlOutput.value = htmlCode.trim();  
   }
 
+  //Copy to Clipboard
+function copyToClipboard(elementId) {
+    const textarea = document.getElementById(elementId);
+    textarea.select();
+    document.execCommand("copy");
+    alert("Copied to clipboard!");
+}
   //Inputs
 document.getElementById('columns').addEventListener('input', updateGrid);
 document.getElementById('rows').addEventListener('input', updateGrid);
