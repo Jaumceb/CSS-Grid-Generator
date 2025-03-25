@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="CSS Grid Generator tool that helps you create CSS grid layouts quickly and easily. Customize the number of columns, rows, and gaps, and get the generated CSS and HTML code. Includes drag-and-drop feature for seamless layout adjustments.">
+  <meta name="keywords" content="CSS grid, CSS grid generator, create grid layout, responsive layout, web design tool, web development, grid system, custom grid, HTML CSS generator, drag and drop grid layout, interactive grid, CSS drag-and-drop, web design tool">
+  <meta property="og:title" content="CSS Grid Generator">
+  <meta property="og:description" content="A tool for quickly generating CSS Grid code for your web design projects. Features drag-and-drop functionality for ease of use.">
+  <meta property="og:url" content="https://cssgridgenerator.netlify.app/">
+
+  <meta name="twitter:title" content="CSS Grid Generator">
+  <meta name="twitter:description" content="Create CSS Grid layouts easily with this drag-and-drop tool. Customize rows, columns, and gaps, and generate your HTML and CSS code instantly.">
+
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#5e4caf">
+
   <title>CSS Grid Generator</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -17,17 +30,20 @@
       <label for="gap">Gap(px):</label>
       <input class="control" type="number" id="gap" min="0" value="8">
     </div>
+    <button class="github-button">
+      <a href="https://github.com/Jaumceb/CSS-Grid-Generator" target="_blank">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+    </button>
     
     <div class="grid-container" id="gridContainer"></div>
     
     <div class="output">
-     
       <div class="copy-container">
         <button class="copyToClipboard" onclick="copyToClipboard('cssOutput')">Copy CSS</button>
         <textarea id="cssOutput" rows="10" readonly></textarea>
       </div>
       
-     
       <div class="copy-container">
         <button class="copyToClipboard" onclick="copyToClipboard('htmlOutput')">Copy HTML</button>
         <textarea id="htmlOutput" rows="10" cols="50" readonly></textarea>
@@ -35,7 +51,6 @@
     </div>
     
   </div>
-  
   
   <script src="script.js"></script>
 </body>

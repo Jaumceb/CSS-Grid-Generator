@@ -7,6 +7,7 @@
     justify-content: center;
     height: 100vh;
     margin: 0;
+    background: linear-gradient(90deg, rgba(63,24,94,1) 0%, rgba(112,58,154,1) 50%, rgba(82,32,121,1) 100%);
 }
 
 .container {
@@ -14,33 +15,40 @@
 
 }
 
+.controls {
+  color: rgb(150, 46, 248);
+  background-color: rgb(21, 2, 34);
+  padding: 2px;
+  font-size: 20px;
+  position: absolute;
+  top: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: max-content;
+  margin-top: 10px;
+  z-index: 10;
+  border-radius: 10px;
+}
 
-  
-  .controls {
-    font-size: 20px;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    width: max-content;
-  }
-  
-  .controls label,
-  .controls input {
-    margin: 5px;
-  }
-  .control {
-    border: none;
-    color: white;
-    background-color: #1b1630;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 18px;
-    width: 50px;
-  }
+.controls label,
+.controls input {
+  margin: 5px;
+}
+
+
+.control {
+  border: none;
+  color: rgb(150, 46, 248);
+  background-color: #160d3b;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 18px;
+  width: 60px; 
+}
+
   .grid-container {
-    top: 30px;
+    top: 65px;
     display: grid;
     margin: 20px auto;
     width: 767px;
@@ -50,7 +58,7 @@
 
 
   .grid-item {
-    background-color: #5e4caf;
+    background-color: #1B1630;
     color: white;
     text-align: center;
     position: relative;
@@ -63,7 +71,7 @@
     top: 0px;
     left: 0px;
     background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+    color: blueviolet;
     border: none;
     padding: 5px;
     cursor: pointer;
@@ -71,7 +79,7 @@
     width: 100%;
     border-radius: 10px;
     font-size: 15px;
-    color: grey;
+    
   }
   
   .grid-item button:hover {
@@ -82,7 +90,6 @@
     width: 100%;
     height: 100%;
     background-color: #735cda;
-    border: 2px dashed #000;
     cursor: move;
     position: absolute;
     top: 0;
@@ -99,8 +106,8 @@
     width: 10px;
     height: 10px;
     position: absolute;
-    bottom: 2px;
-    right:2px;
+    bottom: 4px;
+    right:5px;
     cursor: se-resize;
     color: rgb(255, 255, 255);
     line-height: 10px;
@@ -110,7 +117,7 @@
   
   .output {
     position: relative;
-    margin-top: 20px;
+    margin-top: 10px;
     height: 500px;
     padding: 10px;
     z-index: 10; 
@@ -125,11 +132,11 @@
   
   .copyToClipboard {
     position: absolute;
-    top: 15px;
+    top: 60px;
     right: 0px;
     padding: 5px 10px;
-    background-color: #5e4caf;
-    color: white;
+    color: rgb(150, 46, 248);
+    background-color: #160d3b;
     border: none;
     cursor: pointer;
     border-radius: 10px;
@@ -139,28 +146,127 @@
   .copyToClipboard:hover {
     background-color: #4a3a92;
   }
-  
+  #cssOutput {
+    margin-top: 60px;
+  }
+  #htmlOutput {
+    margin-top: 10px;
+  }
   textarea {
     width: 100%;
     padding: 10px;
     font-family: monospace;
-    margin-top: 15px;
     border: none;
     border-radius: 10px;
     box-shadow: 1px 1px 15px #000;
     
   }
-  
-  @media (max-width: 768px) {
-    .grid-container {
+
+.github-button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: #160d3b;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.github-button a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+
+.github-button a:hover {
+  color: #f1f1f1;
+}
+
+.github-button i {
+  margin-right: 8px;
+}
+.github-button:hover {
+  background-color: #4a3a92;
+}
+
+@media (max-width: 1024px) {
+  .controls {
+    font-size: 18px;
+}
+
+.control {
+    font-size: 16px;
+    width: 50px;  
+}
+  .github-button {
+      padding: 8px 12px;
+      font-size: 14px;
+  }
+
+  .github-button i {
+      font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .controls {
+    font-size: 16px;
+}
+
+.control {
+    font-size: 14px;
+    width: 40px;
+}
+    .github-button {
+      padding: 8px 10px;
+      font-size: 14px;
+      right: 5px;
+  }
+
+  .github-button i {
+      font-size: 12px;
+  }
+  .grid-container {
         width: 479px;
     }
 }
 
-
 @media (max-width: 480px) {
-    .grid-container {
-      width: 380px;
-       
-    }
+  .controls {
+    font-size: 14px;
+    width: 100%;
+    text-align: left;
+    margin-left: 10px; 
+}
+
+.control {
+    font-size: 12px;
+    width: 45px; 
+}
+
+.controls label {
+    font-size: 14px; 
+}
+ .github-button {
+      padding: 6px 10px;
+      font-size: 12px;
+      right: 5px;
+      top: 5px;
+  }
+
+  .github-button i {
+      font-size: 12px;
+  }
+  .grid-container {
+    width: 380px;
+     
+  }
 }
