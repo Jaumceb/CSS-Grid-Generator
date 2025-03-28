@@ -1,4 +1,4 @@
 # CSS-Grid-Generator
-![Image](https://github.com/user-attachments/assets/d5be938c-3bd9-4b89-bf92-433d71ca43ae)
+![Image](https://github.com/user-attachments/assets/f2e7b1b4-e482-4707-8b1e-68b4e719a7cb)
 
 https://cssgridgenerator.netlify.app/
