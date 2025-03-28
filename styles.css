@@ -1,20 +1,16 @@
 * {
-    box-sizing: border-box;
-  }
-  
-  body {
-    display: flex;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-    background: linear-gradient(90deg, rgba(63,24,94,1) 0%, rgba(112,58,154,1) 50%, rgba(82,32,121,1) 100%);
+  box-sizing: border-box;
 }
-
+body {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  background: linear-gradient(90deg, rgba(63,24,94,1) 0%, rgba(112,58,154,1) 50%, rgba(82,32,121,1) 100%);
+}
 .container {
-    margin: auto;
-
+  margin: auto;
 }
-
 .controls {
   color: rgb(150, 46, 248);
   background-color: rgb(21, 2, 34);
@@ -30,138 +26,158 @@
   z-index: 10;
   border-radius: 10px;
 }
-
 .controls label,
 .controls input {
   margin: 5px;
 }
-
-
 .control {
   border: none;
-  color: rgb(150, 46, 248);
+  color: white;
   background-color: #160d3b;
   padding: 5px;
   border-radius: 5px;
   font-size: 18px;
   width: 60px; 
 }
-
-  .grid-container {
-    top: 65px;
-    display: grid;
-    margin: 20px auto;
-    width: 767px;
-    position: relative;
-    grid-auto-rows: 50px; 
+.grid-container {
+  top: 65px;
+  display: grid;
+  margin: 20px auto;
+  width: 767px;
+  position: relative;
+  grid-auto-rows: 50px; 
+  margin-bottom: 80px;
 }
-
-
-  .grid-item {
-    background-color: #1B1630;
-    color: white;
-    text-align: center;
-    position: relative;
-    border-radius: 10px;
-    height: 50px;
-  }
-  
-  .grid-item button {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: blueviolet;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    height: 100%;
-    width: 100%;
-    border-radius: 10px;
-    font-size: 15px;
-    
-  }
-  
-  .grid-item button:hover {
-    background-color: #5e4caf79;
-  }
-  
-  .draggable-element {
-    width: 100%;
-    height: 100%;
-    background-color: #735cda;
-    cursor: move;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    border-radius: 10px;
-    transition: 0.2s;
-  }
-  
-  .resize-handle {
-    width: 10px;
-    height: 10px;
-    position: absolute;
-    bottom: 4px;
-    right:5px;
-    cursor: se-resize;
-    color: rgb(255, 255, 255);
-    line-height: 10px;
-    transform: rotate(-90deg);
-    font-size: 12px;
-  }
-  
-  .output {
-    position: relative;
-    margin-top: 10px;
-    height: 500px;
-    padding: 10px;
-    z-index: 10; 
+.grid-item {
+  background-color: #1B1630;
+  color: white;
+  text-align: center;
+  position: relative;
+  border-radius: 10px;
+  height: 50px;
 }
-  
-  .copy-container {
-    position: relative;
-    display: inline-block;
-    width: 100%;
+.grid-item button {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: blueviolet;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 15px;
     
-  }
-  
-  .copyToClipboard {
-    position: absolute;
-    top: 60px;
-    right: 0px;
-    padding: 5px 10px;
-    color: rgb(150, 46, 248);
-    background-color: #160d3b;
-    border: none;
-    cursor: pointer;
-    border-radius: 10px;
-    font-size: 14px;
-  }
-  
-  .copyToClipboard:hover {
-    background-color: #4a3a92;
-  }
-  #cssOutput {
-    margin-top: 60px;
-  }
-  #htmlOutput {
-    margin-top: 10px;
-  }
-  textarea {
-    width: 100%;
-    padding: 10px;
-    font-family: monospace;
-    border: none;
-    border-radius: 10px;
-    box-shadow: 1px 1px 15px #000;
-    
-  }
-
+}
+.grid-item button:hover {
+  background-color: #5e4caf79;
+}
+.draggable-element {
+  width: 100%;
+  height: 100%;
+  background-color: #735cda;
+  cursor: move;
+  position: absolute;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: 100;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+.draggable-element h1 {
+  position: relative;
+  font-size: 15px;
+  color: white;
+  z-index: 5;
+}
+.remove-btn {
+  height: 20px;
+}
+.remove-btn i {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  color: rgb(156, 15, 15);
+}
+.resize-handle {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  bottom: 5px;
+  right:5px;
+  cursor: se-resize;
+  color: rgb(255, 255, 255);
+  line-height: 10px;
+  transform: rotate(-90deg);
+  font-size: 12px;
+}
+.output {
+  position: relative;
+  margin-top: 10px;
+  height: 500px;
+  padding: 10px;
+  z-index: 10; 
+}
+.copy-container {
+  position: relative;
+  display: inline-block;
+  width: 100%; 
+}
+.copyToClipboard {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 5px 10px;
+  color: rgb(150, 46, 248);
+  background-color: #160d3b;
+  border: none;
+  cursor: pointer;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  font-size: 14px;
+}
+.copyToClipboard2 {
+  position: absolute;
+  top: 10px;
+  right: 0px;
+  padding: 5px 10px;
+  color: rgb(150, 46, 248);
+  background-color: #160d3b;
+  border: none;
+  cursor: pointer;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  font-size: 14px;
+}
+.copyToClipboard:hover {
+  background-color: #4a3a92;
+}
+.copyToClipboard2:hover {
+  background-color: #4a3a92;
+}
+#cssOutput {
+  resize: none;
+}
+#htmlOutput {
+  resize: none;
+  margin-top: 10px;
+}
+textarea {
+  width: 100%;
+  padding: 10px;
+  font-family: monospace;
+  border-radius: 10px;
+  box-shadow: 1px 1px 15px #000; 
+}
 .github-button {
   position: absolute;
   top: 0px;
@@ -177,7 +193,6 @@
   align-items: center;
   justify-content: center;
 }
-
 .github-button a {
   color: white;
   text-decoration: none;
@@ -185,11 +200,9 @@
   display: flex;
   align-items: center;
 }
-
 .github-button a:hover {
   color: #f1f1f1;
 }
-
 .github-button i {
   margin-right: 8px;
 }
@@ -198,75 +211,65 @@
 }
 
 @media (max-width: 1024px) {
-  .controls {
-    font-size: 18px;
+.controls {
+  font-size: 18px;
 }
-
 .control {
-    font-size: 16px;
-    width: 50px;  
+  font-size: 16px;
+  width: 50px;  
 }
-  .github-button {
-      padding: 8px 12px;
-      font-size: 14px;
-  }
-
-  .github-button i {
-      font-size: 14px;
-  }
+.github-button {
+  padding: 8px 12px;
+  font-size: 14px;
 }
-
+.github-button i {
+  font-size: 14px;
+}
+}
 @media (max-width: 768px) {
-  .controls {
-    font-size: 16px;
+.controls {
+  font-size: 16px;
 }
-
 .control {
-    font-size: 14px;
-    width: 40px;
+  font-size: 14px;
+  width: 40px;
 }
-    .github-button {
-      padding: 8px 10px;
-      font-size: 14px;
-      right: 5px;
-  }
-
-  .github-button i {
-      font-size: 12px;
-  }
-  .grid-container {
-        width: 479px;
-    }
+.github-button {
+  padding: 8px 10px;
+  font-size: 14px;
+  right: 5px;
 }
-
+.github-button i {
+  font-size: 12px;
+}
+.grid-container {
+  width: 479px;
+}
+}
 @media (max-width: 480px) {
-  .controls {
-    font-size: 14px;
-    width: 100%;
-    text-align: left;
-    margin-left: 10px; 
+.controls {
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+  margin-left: 10px; 
 }
-
 .control {
-    font-size: 12px;
-    width: 45px; 
+  font-size: 12px;
+  width: 45px; 
 }
-
 .controls label {
-    font-size: 14px; 
+  font-size: 14px; 
 }
- .github-button {
-      padding: 6px 10px;
-      font-size: 12px;
-      right: 5px;
-      top: 5px;
-  }
-
-  .github-button i {
-      font-size: 12px;
-  }
-  .grid-container {
-    width: 380px;
-     
-  }
+.github-button {
+  padding: 6px 10px;
+  font-size: 12px;
+  right: 5px;
+  top: 5px;
+}
+.github-button i {
+  font-size: 12px;
+}
+.grid-container {
+  width: 380px;
+}
 }

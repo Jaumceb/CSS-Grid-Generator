@@ -68,37 +68,45 @@ function updateGrid() {
   }
 
   //Element (DIV)
-function addElement(gridItem) {
-      elementCount++;
-      const element = document.createElement('div');
-      element.classList.add('draggable-element');
-      element.textContent = `${elementCount}`;
-      element.setAttribute('draggable', true);
-      element.setAttribute('id', `div${elementCount}`);
-      element.dataset.col = gridItem.dataset.col;
-      element.dataset.row = gridItem.dataset.row;
+  function addElement(gridItem) {
+    elementCount++;
+    const element = document.createElement('div');
+    element.classList.add('draggable-element');
+    element.setAttribute('draggable', true);
+    element.setAttribute('id', `div${elementCount}`);
+    element.dataset.col = gridItem.dataset.col;
+    element.dataset.row = gridItem.dataset.row;
 
+    const number = document.createElement('h1');
+    number.textContent = elementCount;
+    number.style.margin = '0';
+    number.style.pointerEvents = 'none'; 
+    element.appendChild(number);
 
+    const removeButton = document.createElement('button');
+    removeButton.classList.add('remove-btn');
+    removeButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
+    removeButton.addEventListener('click', function (event) {
+      event.stopPropagation();
+      element.remove();
+      updateHTML();
+  });
+  
 
-      element.addEventListener('dragstart', function (event) {
-        event.dataTransfer.setData("element-id", element.id);
-        setTimeout(() => element.style.opacity = '0.8', 0);
-      });
+    element.appendChild(removeButton);
 
-      element.addEventListener('dragend', function () {
-        element.style.opacity = '1';
-      });
+    const resizeHandle = document.createElement('div');
+    resizeHandle.classList.add('resize-handle');
+    resizeHandle.innerHTML = `<i class="fa-solid fa-up-right-and-down-left-from-center"></i>`;
+    element.appendChild(resizeHandle);
 
-      const resizeHandle = document.createElement('div');
-      resizeHandle.classList.add('resize-handle');
-      resizeHandle.innerHTML = `<i class="fa-solid fa-up-right-and-down-left-from-center"></i>`
-      element.appendChild(resizeHandle);
-
-      resizeHandle.addEventListener('mousedown', function (event) {
+    resizeHandle.addEventListener('mousedown', function (event) {
         event.preventDefault();
 
         const startX = event.clientX;
         const startY = event.clientY;
+        const startWidth = element.offsetWidth;
+        const startHeight = element.offsetHeight;
 
         const gridContainer = document.getElementById('gridContainer');
         const columns = parseInt(document.getElementById('columns').value);
@@ -108,40 +116,45 @@ function addElement(gridItem) {
         const gridCellWidth = (gridContainer.offsetWidth - (columns - 1) * gap) / columns;
         const gridCellHeight = (gridContainer.offsetHeight - (rows - 1) * gap) / rows;
 
-        const startWidth = element.offsetWidth;
-        const startHeight = element.offsetHeight;
+        function onMouseMove(moveEvent) {
+            let deltaX = moveEvent.clientX - startX;
+            let deltaY = moveEvent.clientY - startY;
 
-        const onMouseMove = function (moveEvent) {
-          let deltaX = moveEvent.clientX - startX;
-          let deltaY = moveEvent.clientY - startY;
+            let newWidth = Math.round((startWidth + deltaX + gap) / (gridCellWidth + gap)) * (gridCellWidth + gap) - gap;
+            let newHeight = Math.round((startHeight + deltaY + gap) / (gridCellHeight + gap)) * (gridCellHeight + gap) - gap;
 
-          let newWidth = Math.round((startWidth + deltaX + gap) / (gridCellWidth + gap)) * (gridCellWidth + gap) - gap;
-          let newHeight = Math.round((startHeight + deltaY + gap) / (gridCellHeight + gap)) * (gridCellHeight + gap) - gap;
+            newWidth = Math.max(newWidth, gridCellWidth);
+            newHeight = Math.max(newHeight, gridCellHeight);
 
-          newWidth = Math.max(newWidth, gridCellWidth);
-          newHeight = Math.max(newHeight, gridCellHeight);
+            element.style.width = `${newWidth}px`;
+            element.style.height = `${newHeight}px`;
 
-          element.style.width = `${newWidth}px`;
-          element.style.height = `${newHeight}px`;
+            updateElementCSS(element, gridItem);
+        }
 
-          updateElementCSS(element, gridItem);
-        };
-
-        const onMouseUp = function () {
-          document.removeEventListener('mousemove', onMouseMove);
-          document.removeEventListener('mouseup', onMouseUp);
-        };
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
 
         document.addEventListener('mousemove', onMouseMove);
         document.addEventListener('mouseup', onMouseUp);
-      });
+    });
 
-      gridItem.appendChild(element);
-      updateElementCSS(element, gridItem);
+    element.addEventListener('dragstart', function (event) {
+        event.dataTransfer.setData("element-id", element.id);
+        setTimeout(() => element.style.opacity = '0.8', 0);
+    });
 
-      updateHTML();  
-  }
-  
+    element.addEventListener('dragend', function () {
+        element.style.opacity = '1';
+    });
+
+    gridItem.appendChild(element);
+    updateElementCSS(element, gridItem);
+    updateHTML();
+}
+
   //Code CSS
 function updateElementCSS(element, gridItem) {
       const cssOutput = document.getElementById('cssOutput');

@@ -1,25 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+  <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="CSS Grid Generator tool that helps you create CSS grid layouts quickly and easily. Customize the number of columns, rows, and gaps, and get the generated CSS and HTML code. Includes drag-and-drop feature for seamless layout adjustments.">
-  <meta name="keywords" content="CSS grid, CSS grid generator, create grid layout, responsive layout, web design tool, web development, grid system, custom grid, HTML CSS generator, drag and drop grid layout, interactive grid, CSS drag-and-drop, web design tool">
-  <meta property="og:title" content="CSS Grid Generator">
-  <meta property="og:description" content="A tool for quickly generating CSS Grid code for your web design projects. Features drag-and-drop functionality for ease of use.">
+  <meta name="description" content="CSS Grid Generator - The easiest way to create responsive CSS grid layouts with a drag-and-drop editor. Customize columns, rows, and gaps, then export your code instantly!">
+  <meta name="keywords" content="CSS Grid, CSS Grid Generator, responsive grid, web design tool, layout generator, drag and drop grid, HTML CSS generator, web development">
+  <meta name="author" content="CSS Grid Generator">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="CSS Grid Generator - Create Custom Grid Layouts">
+  <meta property="og:description" content="Easily generate CSS Grid layouts with our interactive tool. Customize rows, columns, and gaps, then get the ready-to-use HTML and CSS code.">
+  <meta property="og:image" content="https://cssgridgenerator.netlify.app/img/Thumbnail-Grid-Generator.png">
   <meta property="og:url" content="https://cssgridgenerator.netlify.app/">
-
-  <meta name="twitter:title" content="CSS Grid Generator">
-  <meta name="twitter:description" content="Create CSS Grid layouts easily with this drag-and-drop tool. Customize rows, columns, and gaps, and generate your HTML and CSS code instantly.">
-
-
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CSS Grid Generator - Create Custom Grid Layouts">
+  <meta name="twitter:description" content="Easily generate CSS Grid layouts with our interactive tool. Customize rows, columns, and gaps, then get the ready-to-use HTML and CSS code.">
+  <meta name="twitter:image" content="https://cssgridgenerator.netlify.app/preview.png">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#5e4caf">
-
-  <title>CSS Grid Generator</title>
+  <link rel="icon" type="image/png" href="img/favicon.png"> 
+  <title>CSS Grid Generator - Create Responsive Layouts with Drag & Drop</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+</head>    
 <body>
   <div class="container">
     <div class="controls">
@@ -45,7 +50,7 @@
       </div>
       
       <div class="copy-container">
-        <button class="copyToClipboard" onclick="copyToClipboard('htmlOutput')">Copy HTML</button>
+        <button class="copyToClipboard2" onclick="copyToClipboard('htmlOutput')">Copy HTML</button>
         <textarea id="htmlOutput" rows="10" cols="50" readonly></textarea>
       </div>
     </div>
