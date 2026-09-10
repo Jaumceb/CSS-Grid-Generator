@@ -23,40 +23,31 @@
   <link rel="icon" type="image/png" href="img/favicon.png"> 
   <title>CSS Grid Generator - Create Responsive Layouts with Drag & Drop</title>
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>    
 <body>
-  <div class="container">
-    <div class="controls">
-      <label for="columns">Columns:</label>
-      <input class="control" type="number" id="columns" min="1" value="5">
-      <label for="rows">Rows:</label>
-      <input class="control" type="number" id="rows" min="1" value="5">
-      <label for="gap">Gap(px):</label>
-      <input class="control" type="number" id="gap" min="0" value="8">
+  <main class="container">
+    <header><h1>CSS Grid Generator</h1><a class="github-button" href="https://github.com/Jaumceb/CSS-Grid-Generator" target="_blank" rel="noopener noreferrer">GitHub ↗</a></header>
+    <p class="instructions">Add a block with +. Drag its number to move it or its corner to resize it. You can also use arrow keys or edit the selected block below. Wide grids scroll inside the preview.</p>
+    <div class="controls" aria-label="Grid settings">
+      <label>Columns<input type="number" id="columns" min="1" max="12" step="1" value="5"></label>
+      <label>Rows<input type="number" id="rows" min="1" max="12" step="1" value="5"></label>
+      <label>Gap (px)<input type="number" id="gap" min="0" max="48" step="1" value="8"></label>
     </div>
-    <button class="github-button">
-      <a href="https://github.com/Jaumceb/CSS-Grid-Generator" target="_blank">
-        <i class="fab fa-github"></i> GitHub
-      </a>
-    </button>
-    
-    <div class="grid-container" id="gridContainer"></div>
-    
-    <div class="output">
-      <div class="copy-container">
-        <button class="copyToClipboard" onclick="copyToClipboard('cssOutput')">Copy CSS</button>
-        <textarea id="cssOutput" rows="10" readonly></textarea>
-      </div>
-      
-      <div class="copy-container">
-        <button class="copyToClipboard2" onclick="copyToClipboard('htmlOutput')">Copy HTML</button>
-        <textarea id="htmlOutput" rows="10" cols="50" readonly></textarea>
-      </div>
-    </div>
-    
-  </div>
-  
-  <script src="script.js"></script>
+    <div class="grid-scroll" role="region" aria-label="Grid preview" tabindex="0"><div class="grid-container" id="gridContainer"></div></div>
+    <form id="itemEditor" hidden>
+      <h2 id="itemTitle">Selected block</h2>
+      <label>Column<input type="number" name="col" min="1" step="1" required></label>
+      <label>Row<input type="number" name="row" min="1" step="1" required></label>
+      <label>Width (columns)<input type="number" name="width" min="1" step="1" required></label>
+      <label>Height (rows)<input type="number" name="height" min="1" step="1" required></label>
+      <button type="submit">Apply</button><button id="removeItem" type="button">Delete block</button>
+    </form>
+    <p id="status" role="status" aria-live="polite">Choose a cell to add your first block.</p>
+    <section class="output" aria-label="Generated code">
+      <div class="copy-container"><div class="output-header"><h2>CSS</h2><button data-copy="cssOutput">Copy CSS</button></div><textarea id="cssOutput" aria-label="Generated CSS" readonly spellcheck="false"></textarea></div>
+      <div class="copy-container"><div class="output-header"><h2>HTML</h2><button data-copy="htmlOutput">Copy HTML</button></div><textarea id="htmlOutput" aria-label="Generated HTML" readonly spellcheck="false"></textarea></div>
+    </section>
+  </main>
+  <script type="module" src="script.js"></script>
 </body>
 </html>

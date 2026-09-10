@@ -1,235 +1,183 @@
-let elementCount = 0; // Counter
-  
-  //Grid Cell
-function updateGrid() {
-  const columns = parseInt(document.getElementById('columns').value);
-  const rows = parseInt(document.getElementById('rows').value);
-  const gap = parseInt(document.getElementById('gap').value);
+import { canPlace, exportGrid } from './grid-model.mjs';
 
-  const gridContainer = document.getElementById('gridContainer');
-  const cssOutput = document.getElementById('cssOutput');
-  const htmlOutput = document.getElementById('htmlOutput');
+const grid = document.getElementById('gridContainer');
+const status = document.getElementById('status');
+const controls = Object.fromEntries(['columns', 'rows', 'gap'].map(id => [id, document.getElementById(id)]));
+const editor = document.getElementById('itemEditor');
+let columns = 5, rows = 5, gap = 8, nextId = 1, selected = null;
+let items = [];
 
-  gridContainer.innerHTML = '';
-
-  for (let i = 0; i < columns * rows; i++) {
-    const gridItem = document.createElement('div');
-    gridItem.classList.add('grid-item');
-    gridItem.setAttribute('id', `cell-${i}`);
-
-    const col = (i % columns) + 1;
-    const row = Math.floor(i / columns) + 1;
-
-    gridItem.dataset.col = col;
-    gridItem.dataset.row = row;
-
-    const button = document.createElement('button');
-    button.textContent = '+';
-    gridItem.appendChild(button);
-    button.addEventListener('click', function () {
-      addElement(gridItem);
-      });
-
-    gridItem.addEventListener('dragover', function (event) {
-      event.preventDefault();
-      });
-    
-    gridItem.addEventListener('drop', function (event) {
-      event.preventDefault();
-      const draggedElementId = event.dataTransfer.getData("element-id");
-      const draggedElement = document.getElementById(draggedElementId);
-
-      
-    if (gridItem.children.length === 1) {
-      gridItem.appendChild(draggedElement);
-      updateElementCSS(draggedElement, gridItem);
-        }
-      });
-
-        gridContainer.appendChild(gridItem);
-      }
-
-      gridContainer.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-      gridContainer.style.gridAutoRows = `min-content`; 
-      gridContainer.style.gridGap = `${gap}px`;
-
-
-      const css = `
-        .grid-container {
-          display: grid;
-          grid-template-columns: repeat(${columns}, 1fr);
-          grid-template-rows: repeat(${rows}, 1fr);
-          grid-gap: ${gap}px;
-        }
-      `;
-      cssOutput.value = css.trim();
-
-      updateHTML();
+function announce(message) { status.textContent = message; }
+function select(id) {
+  selected = id;
+  grid.querySelectorAll('.draggable-element').forEach(node => node.classList.toggle('selected', Number(node.dataset.id) === id));
+  const item = items.find(item => item.id === id);
+  editor.hidden = !item;
+  if (!item) return;
+  document.getElementById('itemTitle').textContent = `Block ${id}`;
+  for (const key of ['col', 'row', 'width', 'height']) {
+    const input = editor.elements[key];
+    input.value = item[key];
+    input.max = ['col', 'width'].includes(key) ? columns : rows;
   }
+}
 
-  //Element (DIV)
-  function addElement(gridItem) {
-    elementCount++;
-    const element = document.createElement('div');
-    element.classList.add('draggable-element');
-    element.setAttribute('draggable', true);
-    element.setAttribute('id', `div${elementCount}`);
-    element.dataset.col = gridItem.dataset.col;
-    element.dataset.row = gridItem.dataset.row;
+function output() {
+  const result = exportGrid(items, columns, rows, gap);
+  document.getElementById('cssOutput').value = result.css;
+  document.getElementById('htmlOutput').value = result.html;
+}
 
-    const number = document.createElement('h1');
-    number.textContent = elementCount;
-    number.style.margin = '0';
-    number.style.pointerEvents = 'none'; 
-    element.appendChild(number);
+function placeStyle(node, item) {
+  node.style.gridColumn = `${item.col} / span ${item.width}`;
+  node.style.gridRow = `${item.row} / span ${item.height}`;
+}
 
-    const removeButton = document.createElement('button');
-    removeButton.classList.add('remove-btn');
-    removeButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
-    removeButton.addEventListener('click', function (event) {
-      event.stopPropagation();
-      element.remove();
-      updateHTML();
-  });
-  
+function updateItem(candidate) {
+  if (!canPlace(items, candidate, columns, rows)) {
+    announce('That position overlaps another block or goes outside the grid.');
+    return false;
+  }
+  items = items.map(item => item.id === candidate.id ? candidate : item);
+  render();
+  return true;
+}
 
-    element.appendChild(removeButton);
+function startPointer(event, item, mode, handle) {
+  if (event.button !== 0) return;
+  event.preventDefault();
+  select(item.id);
+  handle.setPointerCapture(event.pointerId);
+  const startX = event.clientX, startY = event.clientY;
+  const stepX = (grid.clientWidth + gap) / columns;
+  const stepY = 64 + gap;
+  const block = handle.closest('.draggable-element');
+  let candidate = { ...item };
+  function move(event) {
+    const x = Math.round((event.clientX - startX) / stepX);
+    const y = Math.round((event.clientY - startY) / stepY);
+    const next = mode === 'move' ? { ...item, col: item.col + x, row: item.row + y } : { ...item, width: item.width + x, height: item.height + y };
+    if (canPlace(items, next, columns, rows)) { candidate = next; placeStyle(block, candidate); }
+  }
+  function finish(event) {
+    handle.removeEventListener('pointermove', move);
+    handle.removeEventListener('pointerup', finish);
+    handle.removeEventListener('pointercancel', finish);
+    if (event.type === 'pointercancel') { render(); return; }
+    updateItem(candidate);
+    grid.querySelector(`[data-id="${item.id}"] .${mode}-handle`)?.focus({ preventScroll: true });
+    announce(`Block ${item.id}: column ${candidate.col}, row ${candidate.row}, width ${candidate.width}, height ${candidate.height}.`);
+  }
+  handle.addEventListener('pointermove', move);
+  handle.addEventListener('pointerup', finish);
+  handle.addEventListener('pointercancel', finish);
+}
 
-    const resizeHandle = document.createElement('div');
-    resizeHandle.classList.add('resize-handle');
-    resizeHandle.innerHTML = `<i class="fa-solid fa-up-right-and-down-left-from-center"></i>`;
-    element.appendChild(resizeHandle);
-
-    resizeHandle.addEventListener('mousedown', function (event) {
+function render() {
+  grid.replaceChildren();
+  grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+  grid.style.gridTemplateRows = `repeat(${rows}, minmax(64px, auto))`;
+  grid.style.gap = `${gap}px`;
+  grid.style.minWidth = `${columns * 48 + (columns - 1) * gap}px`;
+  for (let row = 1; row <= rows; row++) {
+    for (let col = 1; col <= columns; col++) {
+      const cell = document.createElement('button');
+      cell.className = 'grid-cell';
+      cell.style.gridColumn = col;
+      cell.style.gridRow = row;
+      cell.textContent = '+';
+      cell.setAttribute('aria-label', `Add block at column ${col}, row ${row}`);
+      cell.disabled = !canPlace(items, { id: -1, col, row, width: 1, height: 1 }, columns, rows);
+      cell.addEventListener('click', () => {
+        const id = nextId++;
+        items.push({ id, col, row, width: 1, height: 1 });
+        selected = id;
+        render();
+        grid.querySelector(`[data-id="${id}"] .move-handle`).focus({ preventScroll: true });
+        announce(`Block ${id} added.`);
+      });
+      grid.append(cell);
+    }
+  }
+  for (const item of items) {
+    const block = document.createElement('div');
+    block.className = 'draggable-element';
+    block.dataset.id = item.id;
+    placeStyle(block, item);
+    for (const mode of ['move', 'resize']) {
+      const handle = document.createElement('button');
+      handle.className = `${mode}-handle`;
+      handle.textContent = mode === 'move' ? item.id : '↘';
+      handle.setAttribute('aria-label', `${mode === 'move' ? 'Move' : 'Resize'} block ${item.id}`);
+      handle.title = mode === 'move' ? 'Drag to move; arrow keys also work' : 'Drag to resize; arrow keys also work';
+      handle.addEventListener('focus', () => select(item.id));
+      handle.addEventListener('click', () => select(item.id));
+      handle.addEventListener('pointerdown', event => startPointer(event, item, mode, handle));
+      handle.addEventListener('keydown', event => {
+        const delta = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] }[event.key];
+        if (!delta) return;
         event.preventDefault();
-
-        const startX = event.clientX;
-        const startY = event.clientY;
-        const startWidth = element.offsetWidth;
-        const startHeight = element.offsetHeight;
-
-        const gridContainer = document.getElementById('gridContainer');
-        const columns = parseInt(document.getElementById('columns').value);
-        const rows = parseInt(document.getElementById('rows').value);
-        const gap = parseInt(document.getElementById('gap').value);
-
-        const gridCellWidth = (gridContainer.offsetWidth - (columns - 1) * gap) / columns;
-        const gridCellHeight = (gridContainer.offsetHeight - (rows - 1) * gap) / rows;
-
-        function onMouseMove(moveEvent) {
-            let deltaX = moveEvent.clientX - startX;
-            let deltaY = moveEvent.clientY - startY;
-
-            let newWidth = Math.round((startWidth + deltaX + gap) / (gridCellWidth + gap)) * (gridCellWidth + gap) - gap;
-            let newHeight = Math.round((startHeight + deltaY + gap) / (gridCellHeight + gap)) * (gridCellHeight + gap) - gap;
-
-            newWidth = Math.max(newWidth, gridCellWidth);
-            newHeight = Math.max(newHeight, gridCellHeight);
-
-            element.style.width = `${newWidth}px`;
-            element.style.height = `${newHeight}px`;
-
-            updateElementCSS(element, gridItem);
+        const candidate = mode === 'move' ? { ...item, col: item.col + delta[0], row: item.row + delta[1] } : { ...item, width: item.width + delta[0], height: item.height + delta[1] };
+        if (updateItem(candidate)) {
+          grid.querySelector(`[data-id="${item.id}"] .${mode}-handle`).focus({ preventScroll: true });
+          announce(`Block ${item.id} updated.`);
         }
-
-        function onMouseUp() {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-        }
-
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    });
-
-    element.addEventListener('dragstart', function (event) {
-        event.dataTransfer.setData("element-id", element.id);
-        setTimeout(() => element.style.opacity = '0.8', 0);
-    });
-
-    element.addEventListener('dragend', function () {
-        element.style.opacity = '1';
-    });
-
-    gridItem.appendChild(element);
-    updateElementCSS(element, gridItem);
-    updateHTML();
-}
-
-  //Code CSS
-function updateElementCSS(element, gridItem) {
-      const cssOutput = document.getElementById('cssOutput');
-      const gridContainer = document.getElementById('gridContainer');
-      const gridCellWidth = gridContainer.offsetWidth / parseInt(document.getElementById('columns').value);
-      const gridCellHeight = gridContainer.offsetHeight / parseInt(document.getElementById('rows').value);
-
-      const columnStart = parseInt(gridItem.dataset.col);
-      const rowStart = parseInt(gridItem.dataset.row);
-
-      const columnSpan = Math.round(element.offsetWidth / gridCellWidth);
-      const rowSpan = Math.round(element.offsetHeight / gridCellHeight);
-
-      let cssLines = cssOutput.value.split("\n");
-      let newCssLines = [];
-      let insideBlock = false;
-
-      for (let line of cssLines) {
-        if (line.includes(`#${element.id} {`)) {
-          insideBlock = true; 
-        }
-        if (!insideBlock) {
-          newCssLines.push(line); 
-        }
-        if (insideBlock && line.includes("}")) {
-          insideBlock = false; 
-        }
-      }
-
-      cssOutput.value = newCssLines.join("\n").trim();
-
-      let elementCSS = `#${element.id} {\n`;
-
-      if (columnSpan > 1 || rowSpan > 1) {
-        elementCSS += `  grid-column: span ${columnSpan} / span ${columnSpan};\n`;
-        elementCSS += `  grid-row: span ${rowSpan} / span ${rowSpan};\n`;
-      }
-
-      elementCSS += `  grid-column-start: ${columnStart};\n`;
-      elementCSS += `  grid-row-start: ${rowStart};\n`;
-      elementCSS += `}`;
-
-      cssOutput.value += `\n${elementCSS.trim()}`;
-  }
-  //Code HTML
-function updateHTML() {
-      const gridContainer = document.getElementById('gridContainer');
-      const htmlOutput = document.getElementById('htmlOutput');
-
-      let htmlCode = `<div class="grid-container">\n`;
-
-      gridContainer.childNodes.forEach(cell => {
-
-        const elements = cell.querySelectorAll('.draggable-element');
-        elements.forEach(element => {
-          const elementId = element.id;
-
-          htmlCode += `  <div id="${elementId}">${element.textContent}</div>\n`;
-        });
       });
-
-      htmlCode += `</div>`;
-      htmlOutput.value = htmlCode.trim();  
+      block.append(handle);
+    }
+    grid.append(block);
   }
-
-  //Copy to Clipboard
-function copyToClipboard(elementId) {
-    const textarea = document.getElementById(elementId);
-    textarea.select();
-    document.execCommand("copy");
-    alert("Copied to clipboard!");
+  select(selected);
+  output();
 }
-  //Inputs
-document.getElementById('columns').addEventListener('input', updateGrid);
-document.getElementById('rows').addEventListener('input', updateGrid);
-document.getElementById('gap').addEventListener('input', updateGrid);
 
-window.onload = updateGrid;
+for (const [name, input] of Object.entries(controls)) {
+  input.addEventListener('change', () => {
+    const value = Number(input.value);
+    const min = Number(input.min), max = Number(input.max);
+    if (!input.value || !Number.isInteger(value) || value < min || value > max) {
+      input.value = { columns, rows, gap }[name];
+      announce(`Use a whole number between ${min} and ${max}.`);
+      return;
+    }
+    const newColumns = name === 'columns' ? value : columns;
+    const newRows = name === 'rows' ? value : rows;
+    if (items.some(item => !canPlace(items, item, newColumns, newRows))) {
+      input.value = { columns, rows, gap }[name];
+      announce('Move or resize the blocks before making the grid smaller.');
+      return;
+    }
+    if (name === 'columns') columns = value;
+    if (name === 'rows') rows = value;
+    if (name === 'gap') gap = value;
+    render();
+    announce('Grid updated. Your blocks were kept.');
+  });
+}
+
+editor.addEventListener('submit', event => {
+  event.preventDefault();
+  const candidate = { id: selected };
+  for (const key of ['col', 'row', 'width', 'height']) candidate[key] = Number(editor.elements[key].value);
+  if (updateItem(candidate)) announce(`Block ${selected} updated.`);
+});
+document.getElementById('removeItem').addEventListener('click', () => {
+  const id = selected;
+  items = items.filter(item => item.id !== id);
+  selected = null;
+  render();
+  grid.querySelector('.grid-cell:not(:disabled)')?.focus({ preventScroll: true });
+  announce(`Block ${id} removed.`);
+});
+document.querySelectorAll('[data-copy]').forEach(button => button.addEventListener('click', async () => {
+  const field = document.getElementById(button.dataset.copy);
+  try {
+    await navigator.clipboard.writeText(field.value);
+    announce(`${button.dataset.copy === 'cssOutput' ? 'CSS' : 'HTML'} copied.`);
+  } catch {
+    field.focus();
+    field.select();
+    announce('Copy unavailable. The code is selected; use your device’s Copy command.');
+  }
+}));
+render();
